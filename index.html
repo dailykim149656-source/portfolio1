@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio | Materials Engineer to AI Specialist</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .language-selector {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .lang-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+        
+        .lang-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .lang-btn.active {
+            background: rgba(255,255,255,0.4);
+            border-color: rgba(255,255,255,0.6);
+        }
+        
+        .header {
+            text-align: center;
+            padding: 60px 0;
+            color: white;
+        }
+        
+        .header .name {
+            font-size: 4em;
+            font-weight: 300;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            letter-spacing: 2px;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            font-weight: 500;
+        }
+        
+        .header .subtitle {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .nav {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .nav a:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+        
+        .content {
+            background: white;
+            border-radius: 20px;
+            margin: 40px 0;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 2.2em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+        
+        .about-text {
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+        
+        .about-stats {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 30px;
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+        }
+        
+        .stat-item {
+            margin: 15px 0;
+        }
+        
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            display: block;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 40px;
+            background: #f8f9ff;
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -45px;
+            top: 30px;
+            width: 15px;
+            height: 15px;
+            background: #667eea;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px #667eea;
+        }
+        
+        .timeline-date {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+        
+        .timeline-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .timeline-company {
+            color: #764ba2;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .skill-category {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+        }
+        
+        .skill-category h3 {
+            margin-bottom: 20px;
+            font-size: 1.4em;
+        }
+        
+        .skill-item {
+            background: rgba(255,255,255,0.2);
+            margin: 10px 0;
+            padding: 10px 15px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+        
+        .contact-info {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px;
+            border-radius: 15px;
+            color: white;
+        }
+        
+        .contact-item {
+            margin: 20px 0;
+            font-size: 1.1em;
+        }
+        
+        .contact-form {
+            padding: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: transform 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+            @media (max-width: 768px) {
+            .header .name {
+                font-size: 2.5em;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .nav {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+            
+            .about-grid,
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .timeline {
+                padding-left: 30px;
+            }
+            
+            .language-selector {
+                position: relative;
+                top: 0;
+                right: 0;
+                justify-content: center;
+                margin-bottom: 20px;
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="language-selector">
+        <button class="lang-btn active" onclick="changeLanguage('ko')">한국어</button>
+        <button class="lang-btn" onclick="changeLanguage('en')">English</button>
+        <button class="lang-btn" onclick="changeLanguage('de')">Deutsch</button>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <div class="name" data-key="my-name">김효열</div>
+            <h1 data-key="main-title">재료공학 → AI 전문가</h1>
+            <p class="subtitle" data-key="main-subtitle">반도체 공정 전문성을 바탕으로 AI 기술의 새로운 가능성을 탐구합니다</p>
+            
+            <nav class="nav">
+                <a href="#" onclick="showSection('about')" data-key="nav-about">About</a>
+                <a href="#" onclick="showSection('experience')" data-key="nav-experience">Experience</a>
+                <a href="#" onclick="showSection('skills')" data-key="nav-skills">Skills</a>
+                <a href="#" onclick="showSection('contact')" data-key="nav-contact">Contact</a>
+            </nav>
+        </div>
+        
+        <div class="content">
+            <div id="about" class="section active">
+                <h2 data-key="about-title">About Me</h2>
+                <div class="about-grid">
+                    <div class="about-text">
+                        <p data-key="about-p1">안녕하세요! 재료공학을 전공하고 반도체 업계에서 약 3년간 경험을 쌓은 후, 현재 AI 분야로의 전환을 준비하고 있는 엔지니어입니다.</p>
+                        
+                        <p data-key="about-p2">반도체 장비 업체에서 Etch 공정개발 업무를 통해 깊이 있는 기술적 이해를 쌓았고, 반도체 업체에서의 공정 설계 경험을 통해 실무 적용 능력을 키웠습니다.</p>
+                        
+                        <p data-key="about-p3">현재 MS AI School에서 최신 AI 기술을 학습하며, 반도체 분야의 전문성과 AI 기술을 결합한 혁신적인 솔루션 개발을 목표로 하고 있습니다.</p>
+                    </div>
+                    
+                    <div class="about-stats">
+                        <div class="stat-item">
+                            <span class="stat-number">3+</span>
+                            <span data-key="stat-experience">반도체 업계 경력 (년)</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">2</span>
+                            <span data-key="stat-projects">주요 프로젝트 영역</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">1</span>
+                            <span data-key="stat-challenge">새로운 도전: AI</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="experience" class="section">
+                <h2 data-key="experience-title">Experience</h2>
+                <div class="timeline">
+                    <div class="timeline-item fade-in">
+                        <div class="timeline-date" data-key="exp1-date">현재</div>
+                        <div class="timeline-title" data-key="exp1-title">MS AI School 교육 과정</div>
+                        <div class="timeline-company" data-key="exp1-company">Microsoft AI School</div>
+                        <p data-key="exp1-desc">인공지능 및 머신러닝 기술 교육 수강 중. Python, 데이터 분석, 머신러닝 알고리즘, 딥러닝 등을 학습하며 반도체 분야 경험과의 융합을 모색하고 있습니다.</p>
+                    </div>
+                    
+                    <div class="timeline-item fade-in">
+                        <div class="timeline-date" data-key="exp2-date">9개월</div>
+                        <div class="timeline-title" data-key="exp2-title">공정 설계</div>
+                        <div class="timeline-company" data-key="exp2-company">반도체 업체</div>
+                        <p data-key="exp2-desc">반도체 제조 공정의 설계 및 최적화 업무를 담당했습니다. 공정 파라미터 최적화, 수율 개선, 품질 관리 등의 업무를 통해 실제 생산 환경에서의 문제 해결 능력을 기를 수 있었습니다.</p>
+                    </div>
+                    
+                    <div class="timeline-item fade-in">
+                        <div class="timeline-date" data-key="exp3-date">2년</div>
+                        <div class="timeline-title" data-key="exp3-title">Etch 공정개발</div>
+                        <div class="timeline-company" data-key="exp3-company">반도체 장비 업체</div>
+                        <p data-key="exp3-desc">Etch 공정 개발 및 최적화 업무를 수행했습니다. 플라즈마 식각 기술, 공정 조건 최적화, 장비 특성 분석 등을 통해 반도체 제조 기술에 대한 깊은 이해를 쌓았습니다.</p>
+                    </div>
+                    
+                    <div class="timeline-item fade-in">
+                        <div class="timeline-date" data-key="exp4-date">4년</div>
+                        <div class="timeline-title" data-key="exp4-title">재료공학과 학사 졸업</div>
+                        <div class="timeline-company" data-key="exp4-company">대학교</div>
+                        <p data-key="exp4-desc">재료공학의 기초 이론부터 실습까지 체계적으로 학습했습니다. 소재의 물성, 결정구조, 상변화 등에 대한 이해를 바탕으로 반도체 소재 및 공정에 대한 전문성을 키웠습니다.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="skills" class="section">
+                <h2 data-key="skills-title">Skills & Expertise</h2>
+                <div class="skills-grid">
+                    <div class="skill-category">
+                        <h3 data-key="skills-semiconductor">반도체 전문성</h3>
+                        <div class="skill-item" data-key="skill-etch">Etch 공정 개발</div>
+                        <div class="skill-item" data-key="skill-process">공정 설계 & 최적화</div>
+                        <div class="skill-item" data-key="skill-plasma">플라즈마 기술</div>
+                        <div class="skill-item" data-key="skill-equipment">반도체 장비</div>
+                        <div class="skill-item" data-key="skill-quality">품질 관리</div>
+                    </div>
+                    
+                    <div class="skill-category">
+                        <h3 data-key="skills-materials">재료공학 기반</h3>
+                        <div class="skill-item" data-key="skill-analysis">소재 물성 분석</div>
+                        <div class="skill-item" data-key="skill-crystal">결정구조 해석</div>
+                        <div class="skill-item" data-key="skill-phase">상변화 이론</div>
+                        <div class="skill-item" data-key="skill-surface">표면 분석</div>
+                        <div class="skill-item" data-key="skill-film">박막 기술</div>
+                    </div>
+                    
+                    <div class="skill-category">
+                        <h3 data-key="skills-ai">AI & 데이터</h3>
+                        <div class="skill-item" data-key="skill-python">Python Programming</div>
+                        <div class="skill-item" data-key="skill-ml">Machine Learning</div>
+                        <div class="skill-item" data-key="skill-data">데이터 분석</div>
+                        <div class="skill-item" data-key="skill-dl">딥러닝 (학습 중)</div>
+                        <div class="skill-item" data-key="skill-viz">데이터 시각화</div>
+                    </div>
+                    
+                    <div class="skill-category">
+                        <h3 data-key="skills-technical">기술 역량</h3>
+                        <div class="skill-item" data-key="skill-problem">문제 해결</div>
+                        <div class="skill-item" data-key="skill-decision">데이터 기반 의사결정</div>
+                        <div class="skill-item" data-key="skill-project">프로젝트 관리</div>
+                        <div class="skill-item" data-key="skill-docs">기술 문서 작성</div>
+                        <div class="skill-item" data-key="skill-team">팀 협업</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="contact" class="section">
+                <h2 data-key="contact-title">Contact</h2>
+                <div class="contact-grid">
+                    <div class="contact-info">
+                        <h3 data-key="contact-info-title">연락처 정보</h3>
+                        <div class="contact-item">
+                            📧 your.email@example.com
+                        </div>
+                        <div class="contact-item">
+                            📱 010-0000-0000
+                        </div>
+                        <div class="contact-item">
+                            🔗 LinkedIn: linkedin.com/in/yourprofile
+                        </div>
+                        <div class="contact-item">
+                            💻 GitHub: github.com/yourusername
+                        </div>
+                        <div class="contact-item">
+                            📍 <span data-key="contact-location">Location: 대한민국</span>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-form">
+                        <h3 data-key="contact-form-title">메시지 보내기</h3>
+                        <form>
+                            <div class="form-group">
+                                <label for="name" data-key="form-name">이름</label>
+                                <input type="text" id="name" name="name" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email" data-key="form-email">이메일</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="subject" data-key="form-subject">제목</label>
+                                <input type="text" id="subject" name="subject" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="message" data-key="form-message">메시지</label>
+                                <textarea id="message" name="message" rows="5" required></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn" data-key="form-submit">메시지 전송</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const translations = {
+            ko: {
+                'my-name': '김효열',
+                'main-title': '재료공학 → AI 전문가',
+                'main-subtitle': '반도체 공정 전문성을 바탕으로 AI 기술의 새로운 가능성을 탐구합니다',
+                'nav-about': 'About',
+                'nav-experience': 'Experience',
+                'nav-skills': 'Skills',
+                'nav-contact': 'Contact',
+                'about-title': 'About Me',
+                'about-p1': '안녕하세요! 재료공학을 전공하고 반도체 업계에서 약 3년간 경험을 쌓은 후, 현재 AI 분야로의 전환을 준비하고 있는 엔지니어입니다.',
+                'about-p2': '반도체 장비 업체에서 Etch 공정개발 업무를 통해 깊이 있는 기술적 이해를 쌓았고, 반도체 업체에서의 공정 설계 경험을 통해 실무 적용 능력을 키웠습니다.',
+                'about-p3': '현재 MS AI School에서 최신 AI 기술을 학습하며, 반도체 분야의 전문성과 AI 기술을 결합한 혁신적인 솔루션 개발을 목표로 하고 있습니다.',
+                'stat-experience': '반도체 업계 경력 (년)',
+                'stat-projects': '주요 프로젝트 영역',
+                'stat-challenge': '새로운 도전: AI',
+                'experience-title': 'Experience',
+                'exp1-date': '현재',
+                'exp1-title': 'MS AI School 교육 과정',
+                'exp1-company': 'Microsoft AI School',
+                'exp1-desc': '인공지능 및 머신러닝 기술 교육 수강 중. Python, 데이터 분석, 머신러닝 알고리즘, 딥러닝 등을 학습하며 반도체 분야 경험과의 융합을 모색하고 있습니다.',
+                'exp2-date': '9개월',
+                'exp2-title': '공정 설계',
+                'exp2-company': '반도체 업체',
+                'exp2-desc': '반도체 제조 공정의 설계 및 최적화 업무를 담당했습니다. 공정 파라미터 최적화, 수율 개선, 품질 관리 등의 업무를 통해 실제 생산 환경에서의 문제 해결 능력을 기를 수 있었습니다.',
+                'exp3-date': '2년',
+                'exp3-title': 'Etch 공정개발',
+                'exp3-company': '반도체 장비 업체',
+                'exp3-desc': 'Etch 공정 개발 및 최적화 업무를 수행했습니다. 플라즈마 식각 기술, 공정 조건 최적화, 장비 특성 분석 등을 통해 반도체 제조 기술에 대한 깊은 이해를 쌓았습니다.',
+                'exp4-date': '4년',
+                'exp4-title': '재료공학과 학사 졸업',
+                'exp4-company': '대학교',
+                'exp4-desc': '재료공학의 기초 이론부터 실습까지 체계적으로 학습했습니다. 소재의 물성, 결정구조, 상변화 등에 대한 이해를 바탕으로 반도체 소재 및 공정에 대한 전문성을 키웠습니다.',
+                'skills-title': 'Skills & Expertise',
+                'skills-semiconductor': '반도체 전문성',
+                'skills-materials': '재료공학 기반',
+                'skills-ai': 'AI & 데이터',
+                'skills-technical': '기술 역량',
+                'skill-etch': 'Etch 공정 개발',
+                'skill-process': '공정 설계 & 최적화',
+                'skill-plasma': '플라즈마 기술',
+                'skill-equipment': '반도체 장비',
+                'skill-quality': '품질 관리',
+                'skill-analysis': '소재 물성 분석',
+                'skill-crystal': '결정구조 해석',
+                'skill-phase': '상변화 이론',
+                'skill-surface': '표면 분석',
+                'skill-film': '박막 기술',
+                'skill-python': 'Python Programming',
+                'skill-ml': 'Machine Learning',
+                'skill-data': '데이터 분석',
+                'skill-dl': '딥러닝 (학습 중)',
+                'skill-viz': '데이터 시각화',
+                'skill-problem': '문제 해결',
+                'skill-decision': '데이터 기반 의사결정',
+                'skill-project': '프로젝트 관리',
+                'skill-docs': '기술 문서 작성',
+                'skill-team': '팀 협업',
+                'contact-title': 'Contact',
+                'contact-info-title': '연락처 정보',
+                'contact-location': 'Location: 대한민국',
+                'contact-form-title': '메시지 보내기',
+                'form-name': '이름',
+                'form-email': '이메일',
+                'form-subject': '제목',
+                'form-message': '메시지',
+                'form-submit': '메시지 전송'
+            },
+            en: {
+                'my-name': 'Kim Hyoyeol',
+                'main-title': 'Materials Engineering → AI Specialist',
+                'main-subtitle': 'Exploring new possibilities in AI technology based on semiconductor process expertise',
+                'nav-about': 'About',
+                'nav-experience': 'Experience',
+                'nav-skills': 'Skills',
+                'nav-contact': 'Contact',
+                'about-title': 'About Me',
+                'about-p1': 'Hello! I am an engineer who majored in Materials Engineering and gained approximately 3 years of experience in the semiconductor industry, currently preparing for a transition to the AI field.',
+                'about-p2': 'I built deep technical understanding through Etch process development work at a semiconductor equipment company, and developed practical application skills through process design experience at a semiconductor company.',
+                'about-p3': 'Currently, I am learning the latest AI technologies at MS AI School, aiming to develop innovative solutions that combine my expertise in semiconductors with AI technology.',
+                'stat-experience': 'Semiconductor Industry Experience (Years)',
+                'stat-projects': 'Major Project Areas',
+                'stat-challenge': 'New Challenge: AI',
+                'experience-title': 'Experience',
+                'exp1-date': 'Current',
+                'exp1-title': 'MS AI School Education Program',
+                'exp1-company': 'Microsoft AI School',
+                'exp1-desc': 'Currently taking artificial intelligence and machine learning technology education. Learning Python, data analysis, machine learning algorithms, deep learning, etc., while exploring the integration with semiconductor field experience.',
+                'exp2-date': '9 months',
+                'exp2-title': 'Process Design',
+                'exp2-company': 'Semiconductor Company',
+                'exp2-desc': 'Responsible for design and optimization of semiconductor manufacturing processes. Developed problem-solving skills in actual production environments through process parameter optimization, yield improvement, and quality control.',
+                'exp3-date': '2 years',
+                'exp3-title': 'Etch Process Development',
+                'exp3-company': 'Semiconductor Equipment Company',
+                'exp3-desc': 'Performed Etch process development and optimization work. Built deep understanding of semiconductor manufacturing technology through plasma etching technology, process condition optimization, and equipment characteristic analysis.',
+                'exp4-date': '4 years',
+                'exp4-title': 'Bachelor\'s Degree in Materials Engineering',
+                'exp4-company': 'University',
+                'exp4-desc': 'Systematically learned from basic theory to practical application in materials engineering. Built expertise in semiconductor materials and processes based on understanding of material properties, crystal structures, and phase transformations.',
+                'skills-title': 'Skills & Expertise',
+                'skills-semiconductor': 'Semiconductor Expertise',
+                'skills-materials': 'Materials Engineering Foundation',
+                'skills-ai': 'AI & Data',
+                'skills-technical': 'Technical Capabilities',
+                'skill-etch': 'Etch Process Development',
+                'skill-process': 'Process Design & Optimization',
+                'skill-plasma': 'Plasma Technology',
+                'skill-equipment': 'Semiconductor Equipment',
+                'skill-quality': 'Quality Control',
+                'skill-analysis': 'Material Property Analysis',
+                'skill-crystal': 'Crystal Structure Analysis',
+                'skill-phase': 'Phase Transformation Theory',
+                'skill-surface': 'Surface Analysis',
+                'skill-film': 'Thin Film Technology',
+                'skill-python': 'Python Programming',
+                'skill-ml': 'Machine Learning',
+                'skill-data': 'Data Analysis',
+                'skill-dl': 'Deep Learning (In Progress)',
+                'skill-viz': 'Data Visualization',
+                'skill-problem': 'Problem Solving',
+                'skill-decision': 'Data-Driven Decision Making',
+                'skill-project': 'Project Management',
+                'skill-docs': 'Technical Documentation',
+                'skill-team': 'Team Collaboration',
+                'contact-title': 'Contact',
+                'contact-info-title': 'Contact Information',
+                'contact-location': 'Location: South Korea',
+                'contact-form-title': 'Send Message',
+                'form-name': 'Name',
+                'form-email': 'Email',
+                'form-subject': 'Subject',
+                'form-message': 'Message',
+                'form-submit': 'Send Message'
+            },
+            de: {
+                'my-name': 'Kim Hyoyeol',
+                'main-title': 'Materialwissenschaft → KI-Spezialist',
+                'main-subtitle': 'Erforschung neuer Möglichkeiten in der KI-Technologie basierend auf Halbleiterverfahrens-Expertise',
+                'nav-about': 'Über mich',
+                'nav-experience': 'Erfahrung',
+                'nav-skills': 'Fähigkeiten',
+                'nav-contact': 'Kontakt',
+                'about-title': 'Über mich',
+                'about-p1': 'Hallo! Ich bin ein Ingenieur, der Materialwissenschaft studiert hat und etwa 3 Jahre Erfahrung in der Halbleiterindustrie gesammelt hat. Derzeit bereite ich mich auf einen Übergang in den KI-Bereich vor.',
+                'about-p2': 'Ich habe durch die Arbeit in der Ätzverfah­rensentwicklung bei einem Halbleiterausrüstungsunternehmen tiefes technisches Verständnis aufgebaut und durch Prozessdesign-Erfahrungen bei einem Halbleiterunternehmen praktische Anwendungsfähigkeiten entwickelt.',
+                'about-p3': 'Derzeit lerne ich die neuesten KI-Technologien in der MS AI School und ziele darauf ab, innovative Lösungen zu entwickeln, die meine Expertise in Halbleitern mit KI-Technologie verbinden.',
+                'stat-experience': 'Halbleiterindustrie Erfahrung (Jahre)',
+                'stat-projects': 'Hauptprojektbereiche',
+                'stat-challenge': 'Neue Herausforderung: KI',
+                'experience-title': 'Erfahrung',
+                'exp1-date': 'Aktuell',
+                'exp1-title': 'MS AI School Bildungsprogramm',
+                'exp1-company': 'Microsoft AI School',
+                'exp1-desc': 'Derzeit nehme ich an einer Ausbildung in künstlicher Intelligenz und maschinellem Lernen teil. Ich lerne Python, Datenanalyse, Machine-Learning-Algorithmen, Deep Learning usw. und erkunde die Integration mit Erfahrungen im Halbleiterbereich.',
+                'exp2-date': '9 Monate',
+                'exp2-title': 'Prozessdesign',
+                'exp2-company': 'Halbleiterunternehmen',
+                'exp2-desc': 'Verantwortlich für Design und Optimierung von Halbleiterfertigungsprozessen. Entwickelte Problemlösungsfähigkeiten in realen Produktionsumgebungen durch Prozessparameteroptimierung, Ertragsverbesserung und Qualitätskontrolle.',
+                'exp3-date': '2 Jahre',
+                'exp3-title': 'Ätzverfahrensentwicklung',
+                'exp3-company': 'Halbleiterausrüstungsunternehmen',
+                'exp3-desc': 'Führte Ätzverfahrensentwicklung und -optimierung durch. Baute tiefes Verständnis der Halbleiterfertigungstechnologie durch Plasma-Ätztechnologie, Prozessbedingungsoptimierung und Anlagencharakteristikanalyse auf.',
+                'exp4-date': '4 Jahre',
+                'exp4-title': 'Bachelor-Abschluss in Materialwissenschaft',
+                'exp4-company': 'Universität',
+                'exp4-desc': 'Systematisch von der Grundlagentheorie bis zur praktischen Anwendung in der Materialwissenschaft gelernt. Expertise in Halbleitermaterialien und -prozessen aufgebaut, basierend auf dem Verständnis von Materialeigenschaften, Kristallstrukturen und Phasentransformationen.',
+                'skills-title': 'Fähigkeiten & Expertise',
+                'skills-semiconductor': 'Halbleiter-Expertise',
+                'skills-materials': 'Materialwissenschaftliche Grundlagen',
+                'skills-ai': 'KI & Daten',
+                'skills-technical': 'Technische Fähigkeiten',
+                'skill-etch': 'Ätzverfahrensentwicklung',
+                'skill-process': 'Prozessdesign & Optimierung',
+                'skill-plasma': 'Plasma-Technologie',
+                'skill-equipment': 'Halbleiterausrüstung',
+                'skill-quality': 'Qualitätskontrolle',
+                'skill-analysis': 'Materialeigenschaftsanalyse',
+                'skill-crystal': 'Kristallstrukturanalyse',
+                'skill-phase': 'Phasentransformationstheorie',
+                'skill-surface': 'Oberflächenanalyse',
+                'skill-film': 'Dünnschichttechnologie',
+                'skill-python': 'Python-Programmierung',
+                'skill-ml': 'Maschinelles Lernen',
+                'skill-data': 'Datenanalyse',
+                'skill-dl': 'Deep Learning (in Bearbeitung)',
+                'skill-viz': 'Datenvisualisierung',
+                'skill-problem': 'Problemlösung',
+                'skill-decision': 'Datengestützte Entscheidungsfindung',
+                'skill-project': 'Projektmanagement',
+                'skill-docs': 'Technische Dokumentation',
+                'skill-team': 'Teamarbeit',
+                'contact-title': 'Kontakt',
+                'contact-info-title': 'Kontaktinformationen',
+                'contact-location': 'Standort: Südkorea',
+                'contact-form-title': 'Nachricht senden',
+                'form-name': 'Name',
+                'form-email': 'E-Mail',
+                'form-subject': 'Betreff',
+                'form-message': 'Nachricht',
+                'form-submit': 'Nachricht senden'
+            }
+        };
+        
+        let currentLanguage = 'ko';
+        
+        function changeLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Update language button states
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update document language
+            document.documentElement.lang = lang;
+            
+            // Update all translatable elements
+            const translation = translations[lang];
+            document.querySelectorAll('[data-key]').forEach(element => {
+                const key = element.getAttribute('data-key');
+                if (translation[key]) {
+                    element.textContent = translation[key];
+                }
+            });
+            
+            // Update form submission message
+            updateFormMessage(lang);
+        }
+        
+        function updateFormMessage(lang) {
+            const messages = {
+                ko: '메시지가 성공적으로 전송되었습니다! (실제로는 백엔드 연동이 필요합니다)',
+                en: 'Message sent successfully! (Backend integration required for actual functionality)',
+                de: 'Nachricht erfolgreich gesendet! (Backend-Integration für tatsächliche Funktionalität erforderlich)'
+            };
+            
+            document.querySelector('form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert(messages[currentLanguage]);
+            });
+        }
+        
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            const targetSection = document.getElementById(sectionId);
+            targetSection.classList.add('active');
+            
+            // Add fade-in animation
+            targetSection.classList.add('fade-in');
+            
+            // Update navigation active state
+            const navLinks = document.querySelectorAll('.nav a');
+            navLinks.forEach(link => {
+                link.style.background = 'transparent';
+            });
+            event.target.style.background = 'rgba(255,255,255,0.2)';
+        }
+        
+        // Form submission handling
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const messages = {
+                ko: '메시지가 성공적으로 전송되었습니다! (실제로는 백엔드 연동이 필요합니다)',
+                en: 'Message sent successfully! (Backend integration required for actual functionality)',
+                de: 'Nachricht erfolgreich gesendet! (Backend-Integration für tatsächliche Funktionalität erforderlich)'
+            };
+            alert(messages[currentLanguage]);
+        });
+        
+        // Initial load animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const timelineItems = document.querySelectorAll('.timeline-item');
+            timelineItems.forEach((item, index) => {
+                setTimeout(() => {
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateX(0)';
+                }, index * 200);
+            });
+        });
+    </script>
+</body>
+</html>
